@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserErik : MonoBehaviour
@@ -9,14 +7,23 @@ public class LaserErik : MonoBehaviour
     [SerializeField]
     private int laserMaxLength = 5000;
 
+    private bool hitReflectionObj;
+    private GameObject lastHit;
+
+    private void Awake()
+    {
+        hitReflectionObj = false;
+    }
+
     void Start()
     {
-        if(lineRenderer is null) lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer is null) lineRenderer = GetComponent<LineRenderer>();
     }
 
     void Update()
     {
         lineRenderer.SetPosition(0, transform.position);
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit))
         {
@@ -27,7 +34,14 @@ public class LaserErik : MonoBehaviour
             if (hit.collider.tag.Equals("ReflectionCube"))
             {
                 //TODO: need to finish this
-                hit.collider.gameObject.transform.GetChild(0).gameObject.transform.GetComponent<LineRenderer>().enabled = true;
+                hitReflectionObj = true;
+                lastHit = hit.collider.gameObject;
+                hit.collider.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            }
+            else if (hitReflectionObj)
+            {
+                hitReflectionObj = false;
+                lastHit.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
         else
