@@ -7,6 +7,11 @@ TagManager:
   - ReflectionCube
   - Mirror
   - LaserEndPoint
+  - Door
+  - ResultCube
+  - asd
+  - StartPoint
+  - LaserCube
   layers:
   - Default
   - TransparentFX

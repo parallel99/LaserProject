@@ -32,29 +32,24 @@ public class LaserErik : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit))
         {
-            if (hit.collider) //TODO: maybe a small fix
+            if (hit.collider)
             {
                 lineRenderer.SetPosition(1, hit.point);
                 ReachToFinish(hit);
             }
-            if (hit.collider.tag.Equals("ReflectionCube"))
+            if (hit.collider.tag.Equals("ReflectionCube") || hit.collider.tag.Equals("Mirror"))
             {
-                //TODO: need to finish this
                 hitReflectionObj = true;
                 lastHit = hit.collider.gameObject;
                 hit.collider.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             }
             else if (hitReflectionObj)
             {
-                hitReflectionObj = false;
-                lastHit.transform.GetChild(0).gameObject.SetActive(false);
+                hitReflectionObj = false; 
+                lastHit.transform.GetChild(0).gameObject.GetComponent<LaserErik>().DisableObject();
             }
             if (hit.collider.tag.Equals("Mirror"))
             {
-                /*var mirrorStartPoint = hit.collider.gameObject.transform.GetChild(0).gameObject;
-                mirrorStartPoint.SetActive(true);
-                mirrorStartPoint.transform.position = hit.point;
-                mirrorStartPoint.GetComponent<LaserErik>().mirrorHit = hit;*/
                 var mirrorStartPoint = hit.collider.gameObject.transform.GetChild(0).gameObject;
                 mirrorStartPoint.SetActive(true);
                 mirrorStartPoint.transform.position = hit.point;
@@ -70,14 +65,13 @@ public class LaserErik : MonoBehaviour
                     RaycastHit hitWithMirror;
                     if (Physics.Raycast(ray.origin, ray.direction, out hitWithMirror))
                     {
-                        if (hitWithMirror.collider) //TODO: maybe a small fix
+                        if (hitWithMirror.collider)
                         {
                             renderer.SetPosition(1, hitWithMirror.point);
                             ReachToFinish(hitWithMirror);
                         }
-                        if (hitWithMirror.collider.tag.Equals("ReflectionCube"))
+                        if (hitWithMirror.collider.tag.Equals("ReflectionCube") || hitWithMirror.collider.tag.Equals("Mirror"))
                         {
-                            //Needs optimization here and the full script
                             hitReflectionObj = true;
                             lastHit = hitWithMirror.collider.gameObject;
                             hitWithMirror.collider.gameObject.transform.GetChild(0).gameObject.SetActive(true);
@@ -85,7 +79,7 @@ public class LaserErik : MonoBehaviour
                         else if (hitReflectionObj)
                         {
                             hitReflectionObj = false;
-                            lastHit.transform.GetChild(0).gameObject.SetActive(false);
+                            lastHit.transform.GetChild(0).gameObject.GetComponent<LaserErik>().DisableObject();
                         }
                         ReachToFinish(hitWithMirror);
                     } 
@@ -96,32 +90,11 @@ public class LaserErik : MonoBehaviour
                 }
                 
             }
-            /*if (gameObject.transform.parent.tag.Equals("Mirror"))
-            {
-                if (mirrorHit.point != null)
-                {
-                    lineRenderer.SetPosition(0, mirrorHit.point);
-                    lineRenderer.SetPosition(1, Vector3.Reflect(mirrorHit.transform.forward, mirrorHit.normal) * laserMaxLength);
-                    Debug.Log(mirrorHit.point);
-                }
-
-            }*/
-
         } 
         else if (!gameObject.transform.parent.tag.Equals("Mirror"))
         {
             lineRenderer.SetPosition(1, transform.forward * laserMaxLength);
         }
-        /*if (gameObject.transform.parent.tag.Equals("Mirror"))
-        {
-            if (mirrorHit.point != null)
-            {
-                lineRenderer.SetPosition(0, mirrorHit.point);
-                lineRenderer.SetPosition(1, Vector3.Reflect(mirrorHit.transform.forward, mirrorHit.normal) * laserMaxLength);
-                Debug.Log(mirrorHit.point);
-            }
-
-        }*/
     }
 
     private void ReachToFinish(RaycastHit hit)
@@ -130,5 +103,14 @@ public class LaserErik : MonoBehaviour
         {
             Debug.Log("Siker");
         }
+    }
+
+    public void DisableObject()
+    {
+        if (lastHit != null)
+        {
+            lastHit.transform.GetChild(0).gameObject.GetComponent<LaserErik>().DisableObject();
+        }
+        gameObject.SetActive(false);
     }
 }
