@@ -122,7 +122,7 @@ public class laserHittPointSetter : MonoBehaviour
             gameObject.GetComponent<LineRenderer>().enabled = false;
             gameObject.GetComponent<laserHittPointSetter>().enabled = false;
         }
-        if (gameObject == localLastHit && lastHit.tag.Equals("LaserCube"))
+        if (lastHit != null && gameObject == localLastHit && lastHit.tag.Equals("LaserCube"))
         {
             lastHit.GetComponent<LineRenderer>().enabled = false;
             lastHit.GetComponent<laserHittPointSetter>().enabled = false;

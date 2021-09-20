@@ -1866,6 +1866,7 @@ GameObject:
   - component: {fileID: 1121258419}
   - component: {fileID: 1121258418}
   - component: {fileID: 1121258417}
+  - component: {fileID: 1121258422}
   m_Layer: 0
   m_Name: LaserCube
   m_TagString: LaserCube
@@ -2065,6 +2066,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1121258415}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1121258422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121258415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1acfdcf71549d84fbac057c47c6931c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1154049618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,6 +2219,7 @@ GameObject:
   - component: {fileID: 1198560363}
   - component: {fileID: 1198560362}
   - component: {fileID: 1198560361}
+  - component: {fileID: 1198560366}
   m_Layer: 0
   m_Name: LaserCube (3)
   m_TagString: LaserCube
@@ -2405,6 +2419,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1198560359}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1198560366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198560359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1acfdcf71549d84fbac057c47c6931c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1241359582
 GameObject:
   m_ObjectHideFlags: 0
