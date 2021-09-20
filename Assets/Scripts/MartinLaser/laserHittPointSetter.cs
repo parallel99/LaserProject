@@ -59,7 +59,7 @@ public class laserHittPointSetter : MonoBehaviour
                     }
                     else if (wasHit[0])
                     {
-                        DisableObject();
+                        DisableObject(lastHit);
                         wasHit[0] = false;
                     }
                     if (hit.collider.tag.Equals("LaserSplitter"))
@@ -76,11 +76,10 @@ public class laserHittPointSetter : MonoBehaviour
                         {
                             hitPointList[y].enabled = true;
                         }
-
                     }
                     else if (wasHit[1])
                     {
-                        DisableObject();
+                        DisableObject(lastHit);
                         wasHit[1] = false;
                     }
                     break;
@@ -88,12 +87,12 @@ public class laserHittPointSetter : MonoBehaviour
             }
             else if (wasHit[1])
             {
-                DisableObject();
+                DisableObject(lastHit);
                 wasHit[1] = false;
             }
             else if (wasHit[0])
             {
-                DisableObject();
+                DisableObject(lastHit);
                 wasHit[0] = false;
             }
             else
@@ -104,18 +103,18 @@ public class laserHittPointSetter : MonoBehaviour
         }
     }
 
-    public void DisableObject()
+    public void DisableObject(GameObject localLastHit)
     {
-        if (lastHit != null && !lastHit.tag.Equals("LaserSplitter"))
+        if (lastHit != null && lastHit.tag.Equals("LaserCube") && localLastHit != gameObject)
         {
-            lastHit.GetComponent<laserHittPointSetter>().DisableObject();
+            lastHit.GetComponent<laserHittPointSetter>().DisableObject(lastHit);
         }
-        if (lastHit != null && lastHit.tag.Equals("LaserSplitter"))
+        if (lastHit != null && lastHit.tag.Equals("LaserSplitter") && localLastHit != gameObject.transform.parent.gameObject)
         {
             hitPointList = lastHit.GetComponentsInChildren<laserHittPointSetter>();
             for (int i = 0; i < hitPointList.Length; i++)
             {
-                hitPointList[i].DisableObject();
+                hitPointList[i].DisableObject(lastHit);
             }
         }
         if (gameObject.tag.Equals("LaserCube"))
@@ -123,6 +122,26 @@ public class laserHittPointSetter : MonoBehaviour
             gameObject.GetComponent<LineRenderer>().enabled = false;
             gameObject.GetComponent<laserHittPointSetter>().enabled = false;
         }
+        if (gameObject == localLastHit && lastHit.tag.Equals("LaserCube"))
+        {
+            lastHit.GetComponent<LineRenderer>().enabled = false;
+            lastHit.GetComponent<laserHittPointSetter>().enabled = false;
+        }
+        
+        if (gameObject.transform.parent.gameObject == localLastHit && lastHit.tag.Equals("LaserSplitter"))
+        {
+            laserList = lastHit.GetComponentsInChildren<LineRenderer>();
+            hitPointList = lastHit.GetComponentsInChildren<laserHittPointSetter>();
+            for (int y = 0; y < laserList.Length; y++)
+            {
+                laserList[y].enabled = true;
+            }
+            for (int y = 0; y < hitPointList.Length; y++)
+            {
+                hitPointList[y].enabled = true;
+            }
+        }
+        
         if (gameObject.tag.Equals("LaserSplitter"))
         {
             gameObject.GetComponent<LineRenderer>().enabled = false;
