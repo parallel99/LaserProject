@@ -128,17 +128,17 @@ public class laserHittPointSetter : MonoBehaviour
             lastHit.GetComponent<laserHittPointSetter>().enabled = false;
         }
         
-        if (gameObject.transform.parent.gameObject == localLastHit && lastHit.tag.Equals("LaserSplitter"))
+        if (lastHit != null && gameObject.transform.parent.gameObject == localLastHit && lastHit.tag.Equals("LaserSplitter"))
         {
             laserList = lastHit.GetComponentsInChildren<LineRenderer>();
             hitPointList = lastHit.GetComponentsInChildren<laserHittPointSetter>();
             for (int y = 0; y < laserList.Length; y++)
             {
-                laserList[y].enabled = true;
+                laserList[y].enabled = false;
             }
             for (int y = 0; y < hitPointList.Length; y++)
             {
-                hitPointList[y].enabled = true;
+                hitPointList[y].enabled = false;
             }
         }
         
