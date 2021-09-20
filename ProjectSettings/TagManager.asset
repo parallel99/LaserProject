@@ -12,6 +12,7 @@ TagManager:
   - asd
   - StartPoint
   - LaserCube
+  - LaserSplitter
   layers:
   - Default
   - TransparentFX

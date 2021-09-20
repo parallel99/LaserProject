@@ -15,6 +15,9 @@ public class laserHittPointSetter : MonoBehaviour
     private bool wasHit;
     private GameObject lastHit;
 
+    private LineRenderer[] laserList;
+    private laserHittPointSetter[] hitPointList;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +55,23 @@ public class laserHittPointSetter : MonoBehaviour
                         lastHit = hit.collider.gameObject;
                         hit.collider.gameObject.GetComponent<LineRenderer>().enabled = true;
                         hit.collider.gameObject.GetComponent<laserHittPointSetter>().enabled = true;             
-                    } 
+                    }
+                    if (hit.collider.tag.Equals("LaserSplitter"))
+                    {
+                        wasHit = true;
+                        lastHit = hit.collider.gameObject;
+                        laserList = hit.collider.gameObject.GetComponentsInChildren<LineRenderer>();
+                        hitPointList = hit.collider.gameObject.GetComponentsInChildren<laserHittPointSetter>();
+                        for (int y = 0; y < laserList.Length; y++)
+                        {
+                            laserList[y].enabled = true;
+                        }
+                        for (int y = 0; y < hitPointList.Length; y++)
+                        {
+                            hitPointList[y].enabled = true;
+                        }
+
+                    }
                     else if (wasHit)
                     {
                         DisableObject();
@@ -76,11 +95,24 @@ public class laserHittPointSetter : MonoBehaviour
 
     public void DisableObject()
     {
-        if (lastHit != null)
+        if (lastHit != null && !lastHit.CompareTag("LaserSplitter"))
         {
             lastHit.GetComponent<laserHittPointSetter>().DisableObject();
         }
+        if (lastHit != null && lastHit.CompareTag("LaserSplitter"))
+        {
+            hitPointList = lastHit.GetComponentsInChildren<laserHittPointSetter>();
+            for (int i = 0; i < hitPointList.Length; i++)
+            {
+                hitPointList[i].DisableObject();
+            }
+        }
         if (gameObject.tag.Equals("LaserCube"))
+        {
+            gameObject.GetComponent<LineRenderer>().enabled = false;
+            gameObject.GetComponent<laserHittPointSetter>().enabled = false;
+        }
+        if (gameObject.tag.Equals("LaserSplitter"))
         {
             gameObject.GetComponent<LineRenderer>().enabled = false;
             gameObject.GetComponent<laserHittPointSetter>().enabled = false;
