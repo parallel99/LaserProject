@@ -43,26 +43,28 @@ public class laserHittPointSetter : MonoBehaviour
                 lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
                 //remaingLength -= Vector3.Distance(ray.origin, hit.point);
                 ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
-                if (hit.collider.tag != "ReflectionCube")
+                if (!hit.collider.CompareTag("ReflectionCube"))
                 {
-                    if (hit.collider.tag == "ResultCube")
+                    if (hit.collider.CompareTag("ResultCube"))
                     {
                         //GameObject.FindWithTag("Door").SendMessage("OpenDoor");
                         Debug.Log("Siker");
                     }
-                    if (hit.collider.tag.Equals("LaserCube"))
+
+                    if (hit.collider.CompareTag("LaserCube"))
                     {
                         wasHit[0] = true;
                         lastHit = hit.collider.gameObject;
                         hit.collider.gameObject.GetComponent<LineRenderer>().enabled = true;
-                        hit.collider.gameObject.GetComponent<laserHittPointSetter>().enabled = true;             
+                        hit.collider.gameObject.GetComponent<laserHittPointSetter>().enabled = true;
                     }
                     else if (wasHit[0])
                     {
-                        DisableObject(lastHit);
+                        DisableObject(new List<GameObject>());
                         wasHit[0] = false;
                     }
-                    if (hit.collider.tag.Equals("LaserSplitter"))
+
+                    if (hit.collider.CompareTag("LaserSplitter"))
                     {
                         wasHit[1] = true;
                         lastHit = hit.collider.gameObject;
@@ -72,6 +74,7 @@ public class laserHittPointSetter : MonoBehaviour
                         {
                             laserList[y].enabled = true;
                         }
+
                         for (int y = 0; y < hitPointList.Length; y++)
                         {
                             hitPointList[y].enabled = true;
@@ -79,20 +82,21 @@ public class laserHittPointSetter : MonoBehaviour
                     }
                     else if (wasHit[1])
                     {
-                        DisableObject(lastHit);
+                        DisableObject(new List<GameObject>());
                         wasHit[1] = false;
                     }
+
                     break;
                 }
             }
             else if (wasHit[1])
             {
-                DisableObject(lastHit);
+                DisableObject(new List<GameObject>());
                 wasHit[1] = false;
             }
             else if (wasHit[0])
             {
-                DisableObject(lastHit);
+                DisableObject(new List<GameObject>());
                 wasHit[0] = false;
             }
             else
@@ -103,46 +107,47 @@ public class laserHittPointSetter : MonoBehaviour
         }
     }
 
-    public void DisableObject(GameObject localLastHit)
+    public void DisableObject(List<GameObject> hits)
     {
-        if (lastHit != null && lastHit.tag.Equals("LaserCube") && localLastHit != gameObject)
+        if (lastHit != null && lastHit.CompareTag("LaserCube") && !hits.Contains(gameObject))
         {
-            lastHit.GetComponent<laserHittPointSetter>().DisableObject(lastHit);
+            if (!gameObject.CompareTag("StartPoint")) 
+            { 
+                hits.Add(gameObject);
+            }
+            lastHit.GetComponent<laserHittPointSetter>().DisableObject(hits);
         }
-        if (lastHit != null && lastHit.tag.Equals("LaserSplitter") && localLastHit != gameObject.transform.parent.gameObject)
+
+        if (gameObject.CompareTag("LaserCube") && hits.Contains(gameObject))
         {
+            hits.Add(lastHit);
+            for (int i = 0; i < hits.Count; i++)
+            {
+                hits[i].GetComponent<LineRenderer>().enabled = false;
+                hits[i].GetComponent<laserHittPointSetter>().enabled = false;
+            }
+        }
+
+        if (lastHit != null && lastHit.tag.Equals("LaserSplitter") && !hits.Contains(gameObject))
+        {
+            hits.Add(gameObject);
             hitPointList = lastHit.GetComponentsInChildren<laserHittPointSetter>();
             for (int i = 0; i < hitPointList.Length; i++)
             {
-                hitPointList[i].DisableObject(lastHit);
-            }
-        }
-        if (gameObject.tag.Equals("LaserCube"))
-        {
-            gameObject.GetComponent<LineRenderer>().enabled = false;
-            gameObject.GetComponent<laserHittPointSetter>().enabled = false;
-        }
-        if (lastHit != null && gameObject == localLastHit && lastHit.tag.Equals("LaserCube"))
-        {
-            lastHit.GetComponent<LineRenderer>().enabled = false;
-            lastHit.GetComponent<laserHittPointSetter>().enabled = false;
-        }
-        
-        if (lastHit != null && gameObject.transform.parent.gameObject == localLastHit && lastHit.tag.Equals("LaserSplitter"))
-        {
-            laserList = lastHit.GetComponentsInChildren<LineRenderer>();
-            hitPointList = lastHit.GetComponentsInChildren<laserHittPointSetter>();
-            for (int y = 0; y < laserList.Length; y++)
-            {
-                laserList[y].enabled = false;
-            }
-            for (int y = 0; y < hitPointList.Length; y++)
-            {
-                hitPointList[y].enabled = false;
+                hitPointList[i].DisableObject(hits);
             }
         }
         
-        if (gameObject.tag.Equals("LaserSplitter"))
+        if (hits.Contains(gameObject) && gameObject.CompareTag("LaserSplitter"))
+        {
+            for (int i = 1; i < hits.Count; i++)
+            {
+                hits[i].GetComponent<LineRenderer>().enabled = false;
+                hits[i].GetComponent<laserHittPointSetter>().enabled = false;
+            }
+        }
+
+        if (gameObject.CompareTag("LaserSplitter"))
         {
             gameObject.GetComponent<LineRenderer>().enabled = false;
             gameObject.GetComponent<laserHittPointSetter>().enabled = false;
