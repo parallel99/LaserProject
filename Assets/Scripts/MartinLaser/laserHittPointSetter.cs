@@ -125,6 +125,11 @@ public class laserHittPointSetter : MonoBehaviour
                 hitPointList[i].DisableObject(hits);
             }
         }
+
+        if (lastHit == null && (gameObject.CompareTag("LaserCube") || gameObject.transform.parent.CompareTag("LaserSplitter")))
+        {
+            hits.Add(gameObject);
+        }
         
         if (hits.Contains(gameObject) && (gameObject.CompareTag("LaserCube") || gameObject.CompareTag("LaserSplitter")))
         {
