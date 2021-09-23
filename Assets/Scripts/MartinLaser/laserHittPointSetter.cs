@@ -47,8 +47,7 @@ public class laserHittPointSetter : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("ResultCube"))
                     {
-                        //GameObject.FindWithTag("Door").SendMessage("OpenDoor");
-                        Debug.Log("Siker");
+                        GoalReached();
                     }
 
                     if (hit.collider.CompareTag("LaserCube") && (lastHit == null || lastHit == hit.collider.gameObject))
@@ -152,5 +151,10 @@ public class laserHittPointSetter : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void GoalReached()
+    {
+        //code to be executed after the result cube was hit
     }
 }
