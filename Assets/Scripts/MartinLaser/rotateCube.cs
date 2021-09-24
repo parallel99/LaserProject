@@ -16,8 +16,14 @@ public class rotateCube : MonoBehaviour
         
     }
 
-    void OnMouseDown()
+    private void OnMouseOver()
     {
-        transform.Rotate(0.0f, 5.0f, 0.0f, Space.Self);
+        if(Input.GetMouseButtonDown(1)){
+            transform.Rotate(0.0f, 5.0f, 0.0f, Space.Self);
+        }
+        else if(Input.GetMouseButtonDown(0))
+        {
+            transform.Rotate(0.0f, -5.0f, 0.0f, Space.Self);
+        }
     }
 }
